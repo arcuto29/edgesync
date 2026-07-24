@@ -1,181 +1,190 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useRef, Suspense } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { Environment, Float, MeshDistortMaterial } from '@react-three/drei';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import * as THREE from 'three';
+
+function SmartRing() {
+  const ringRef = useRef<THREE.Group>(null);
+  const innerGlowRef = useRef<THREE.Mesh>(null);
+
+  useFrame((state) => {
+    if (ringRef.current) {
+      // Slow auto-rotation
+      ringRef.current.rotation.y += 0.008;
+      // Gentle wobble
+      ringRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.3) * 0.1 + 0.4;
+      ringRef.current.rotation.z = Math.cos(state.clock.elapsedTime * 0.2) * 0.05;
+    }
+    if (innerGlowRef.current) {
+      // Pulse the inner glow
+      const scale = 1 + Math.sin(state.clock.elapsedTime * 2) * 0.02;
+      innerGlowRef.current.scale.set(scale, scale, scale);
+    }
+  });
+
+  return (
+    <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.5}>
+      <group ref={ringRef} rotation={[0.4, 0, 0]}>
+        {/* Main ring body — dark titanium */}
+        <mesh>
+          <torusGeometry args={[1.4, 0.35, 64, 128]} />
+          <meshStandardMaterial
+            color="#2a2a2a"
+            metalness={0.95}
+            roughness={0.15}
+            envMapIntensity={1.2}
+          />
+        </mesh>
+
+        {/* Brushed metal accent ring — outer edge */}
+        <mesh>
+          <torusGeometry args={[1.4, 0.36, 64, 128]} />
+          <meshStandardMaterial
+            color="#1a1a1a"
+            metalness={1}
+            roughness={0.3}
+            transparent
+            opacity={0.3}
+          />
+        </mesh>
+
+        {/* Inner ring — slightly different tone */}
+        <mesh>
+          <torusGeometry args={[1.4, 0.28, 64, 128]} />
+          <meshStandardMaterial
+            color="#111111"
+            metalness={0.9}
+            roughness={0.4}
+          />
+        </mesh>
+
+        {/* Green sensor strip on inside */}
+        <mesh ref={innerGlowRef} rotation={[Math.PI / 2, 0, 0]}>
+          <torusGeometry args={[1.12, 0.04, 32, 128]} />
+          <meshStandardMaterial
+            color="#4ade80"
+            emissive="#4ade80"
+            emissiveIntensity={2}
+            toneMapped={false}
+          />
+        </mesh>
+
+        {/* Secondary sensor dots */}
+        {[0, 1.2, -1.2].map((offset, i) => (
+          <mesh key={i} position={[Math.cos(offset) * 1.12, 0, Math.sin(offset) * 1.12]}>
+            <sphereGeometry args={[0.03, 16, 16]} />
+            <meshStandardMaterial
+              color="#22c55e"
+              emissive="#22c55e"
+              emissiveIntensity={3}
+              toneMapped={false}
+            />
+          </mesh>
+        ))}
+      </group>
+    </Float>
+  );
+}
+
+function RingScene() {
+  return (
+    <Canvas
+      camera={{ position: [0, 0, 5], fov: 40 }}
+      gl={{ antialias: true, alpha: true }}
+      style={{ background: 'transparent' }}
+    >
+      <ambientLight intensity={0.3} />
+      <directionalLight position={[5, 5, 5]} intensity={1} color="#ffffff" />
+      <directionalLight position={[-3, -2, 4]} intensity={0.4} color="#4ade80" />
+      <pointLight position={[0, 0, 3]} intensity={0.5} color="#a78bfa" />
+      <Suspense fallback={null}>
+        <SmartRing />
+        <Environment preset="city" />
+      </Suspense>
+    </Canvas>
+  );
+}
 
 export default function HeroRing() {
   const { scrollY } = useScroll();
   
-  // Scroll-based transforms
   const ringScale = useTransform(scrollY, [0, 300], [1, 0.5]);
   const ringOpacity = useTransform(scrollY, [0, 350], [1, 0]);
-  const ringRotateX = useTransform(scrollY, [0, 400], [65, 30]);
-  const ringRotateZ = useTransform(scrollY, [0, 400], [-20, 15]);
   const ringY = useTransform(scrollY, [0, 300], [0, -60]);
-  const textOpacity = useTransform(scrollY, [0, 150], [1, 0]);
-  const textY = useTransform(scrollY, [0, 150], [0, -20]);
+  const textOpacity = useTransform(scrollY, [0, 180], [1, 0]);
+  const textY = useTransform(scrollY, [0, 180], [0, -20]);
   
-  // Smooth spring physics
   const smoothScale = useSpring(ringScale, { stiffness: 80, damping: 25 });
-  const smoothRotateX = useSpring(ringRotateX, { stiffness: 60, damping: 20 });
-  const smoothRotateZ = useSpring(ringRotateZ, { stiffness: 60, damping: 20 });
   const smoothY = useSpring(ringY, { stiffness: 80, damping: 25 });
 
-  const [pulseActive, setPulseActive] = useState(true);
-  useEffect(() => {
-    const interval = setInterval(() => setPulseActive((p) => !p), 2500);
-    return () => clearInterval(interval);
-  }, []);
-
   return (
-    <div className="relative w-full flex flex-col items-center justify-center pt-8 pb-12 overflow-hidden" style={{ perspective: '1000px' }}>
-      {/* Background glow */}
+    <div className="relative w-full flex flex-col items-center justify-center pt-2 pb-6 overflow-visible">
+      {/* Background glow behind ring */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="w-[400px] h-[400px] rounded-full bg-primary/[0.06] blur-[80px]" />
-        <div className="absolute w-[200px] h-[200px] rounded-full bg-accent/[0.04] blur-[60px]" style={{ animationDelay: '1s' }} />
+        <motion.div 
+          animate={{ opacity: [0.3, 0.6, 0.3], scale: [0.95, 1.05, 0.95] }}
+          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+          className="w-[300px] h-[300px] rounded-full bg-primary/[0.07] blur-[60px]" 
+        />
       </div>
 
-      {/* The 3D Ring */}
+      {/* 3D Ring Canvas */}
       <motion.div
-        style={{ 
-          scale: smoothScale, 
-          rotateX: smoothRotateX,
-          rotateZ: smoothRotateZ,
-          y: smoothY, 
-          opacity: ringOpacity,
-          transformStyle: 'preserve-3d',
-        }}
-        className="relative z-10"
+        style={{ scale: smoothScale, y: smoothY, opacity: ringOpacity }}
+        className="relative z-10 w-[320px] h-[280px]"
       >
-        <div className="relative w-[220px] h-[220px] flex items-center justify-center ring-breathe">
-          {/* Ring shadow on "surface" */}
-          <div className="absolute bottom-[-20px] left-1/2 -translate-x-1/2 w-[160px] h-[30px] bg-primary/[0.08] blur-[20px] rounded-full" />
+        <RingScene />
 
-          {/* Outer ring body — the actual ring shape */}
-          <div 
-            className="absolute inset-[20px] rounded-full border-[16px] border-transparent"
-            style={{
-              background: `linear-gradient(145deg, #3a3a3a 0%, #1a1a1a 30%, #2d2d2d 50%, #1a1a1a 70%, #3a3a3a 100%) padding-box,
-                           linear-gradient(145deg, #555 0%, #222 50%, #444 100%) border-box`,
-              boxShadow: `
-                inset 0 4px 12px rgba(255,255,255,0.08),
-                inset 0 -4px 12px rgba(0,0,0,0.4),
-                0 8px 30px -5px rgba(0,0,0,0.6),
-                0 0 0 1px rgba(255,255,255,0.05)
-              `,
-            }}
-          >
-            {/* Inner channel/groove of the ring */}
-            <div 
-              className="absolute inset-[6px] rounded-full"
-              style={{
-                background: 'linear-gradient(145deg, #1a1a1a, #111, #1a1a1a)',
-                boxShadow: 'inset 0 2px 6px rgba(0,0,0,0.5), inset 0 -1px 3px rgba(255,255,255,0.03)',
-              }}
-            />
-
-            {/* Sensor array (inside of ring — the green LEDs) */}
-            <div className="absolute inset-[14px] rounded-full flex items-center justify-center">
-              <motion.div
-                animate={{ opacity: pulseActive ? [0.4, 1, 0.4] : [0.2, 0.5, 0.2] }}
-                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-                className="flex gap-[6px]"
-              >
-                <div className="w-[5px] h-[5px] rounded-full bg-green-400 shadow-[0_0_6px_2px] shadow-green-400/60" />
-                <div className="w-[5px] h-[5px] rounded-full bg-green-500 shadow-[0_0_6px_2px] shadow-green-500/60" />
-                <div className="w-[5px] h-[5px] rounded-full bg-green-400 shadow-[0_0_6px_2px] shadow-green-400/60" />
-              </motion.div>
-            </div>
-          </div>
-
-          {/* Ring highlight/reflection */}
-          <div 
-            className="absolute inset-[20px] rounded-full pointer-events-none"
-            style={{
-              background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 40%, transparent 60%, rgba(255,255,255,0.03) 100%)',
-              borderRadius: '50%',
-            }}
-          />
-
-          {/* Animated glow around ring */}
-          <motion.div
-            animate={{ 
-              boxShadow: pulseActive 
-                ? '0 0 40px 8px oklch(0.75 0.18 160 / 0.15), 0 0 80px 20px oklch(0.75 0.18 160 / 0.05)' 
-                : '0 0 20px 4px oklch(0.75 0.18 160 / 0.08), 0 0 40px 10px oklch(0.75 0.18 160 / 0.02)'
-            }}
-            transition={{ duration: 2.5, ease: 'easeInOut', repeat: Infinity, repeatType: 'reverse' }}
-            className="absolute inset-[18px] rounded-full"
-          />
-        </div>
-
-        {/* Floating data readouts */}
+        {/* Floating data tags */}
         <motion.div
-          animate={{ opacity: [0, 1, 1, 0], y: [10, 0, 0, -10] }}
-          transition={{ duration: 4, repeat: Infinity, delay: 0, times: [0, 0.15, 0.85, 1] }}
-          className="absolute -right-24 top-6 text-[11px] font-mono text-primary bg-primary/[0.08] border border-primary/20 rounded-lg px-2.5 py-1.5 backdrop-blur-sm"
+          animate={{ opacity: [0, 1, 1, 0], y: [8, 0, 0, -8] }}
+          transition={{ duration: 4, repeat: Infinity, delay: 0, times: [0, 0.12, 0.88, 1] }}
+          className="absolute right-[-20px] top-[30px] text-[11px] font-mono text-primary bg-card/90 border border-primary/20 rounded-lg px-3 py-1.5 backdrop-blur-md shadow-lg shadow-primary/5"
         >
-          HRV 52ms
+          <span className="text-muted-foreground">HRV</span> 52ms
         </motion.div>
         
         <motion.div
-          animate={{ opacity: [0, 1, 1, 0], y: [10, 0, 0, -10] }}
-          transition={{ duration: 4, repeat: Infinity, delay: 1.3, times: [0, 0.15, 0.85, 1] }}
-          className="absolute -left-28 top-10 text-[11px] font-mono text-accent bg-accent/[0.08] border border-accent/20 rounded-lg px-2.5 py-1.5 backdrop-blur-sm"
+          animate={{ opacity: [0, 1, 1, 0], y: [8, 0, 0, -8] }}
+          transition={{ duration: 4, repeat: Infinity, delay: 1.5, times: [0, 0.12, 0.88, 1] }}
+          className="absolute left-[-20px] top-[50px] text-[11px] font-mono text-accent bg-card/90 border border-accent/20 rounded-lg px-3 py-1.5 backdrop-blur-md shadow-lg shadow-accent/5"
         >
-          Sleep 87
+          <span className="text-muted-foreground">Sleep</span> 87
         </motion.div>
 
         <motion.div
-          animate={{ opacity: [0, 1, 1, 0], y: [10, 0, 0, -10] }}
-          transition={{ duration: 4, repeat: Infinity, delay: 2.6, times: [0, 0.15, 0.85, 1] }}
-          className="absolute -right-28 bottom-10 text-[11px] font-mono text-green-400 bg-green-400/[0.08] border border-green-400/20 rounded-lg px-2.5 py-1.5 backdrop-blur-sm"
+          animate={{ opacity: [0, 1, 1, 0], y: [8, 0, 0, -8] }}
+          transition={{ duration: 4, repeat: Infinity, delay: 3, times: [0, 0.12, 0.88, 1] }}
+          className="absolute right-[-10px] bottom-[50px] text-[11px] font-mono text-green-400 bg-card/90 border border-green-400/20 rounded-lg px-3 py-1.5 backdrop-blur-md shadow-lg shadow-green-500/5"
         >
-          Ready 91
+          <span className="text-muted-foreground">Ready</span> 91
         </motion.div>
       </motion.div>
 
       {/* Hero Text */}
       <motion.div
         style={{ opacity: textOpacity, y: textY }}
-        className="relative z-10 text-center mt-10"
+        className="relative z-10 text-center mt-2"
       >
         <motion.h2
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-2xl font-bold text-white tracking-tight"
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="text-xl font-bold text-white tracking-tight"
         >
           Your body knows before you do
         </motion.h2>
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="text-sm text-muted-foreground mt-2.5 max-w-sm mx-auto leading-relaxed"
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="text-[13px] text-muted-foreground mt-2 max-w-xs mx-auto leading-relaxed"
         >
-          EdgeSync reads your ring. Correlates the data. Shows you when to trade — and when to sit out.
+          Your ring reads your vitals. EdgeSync tells you when to trade.
         </motion.p>
-
-        {/* Scroll indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5 }}
-          className="mt-8 flex flex-col items-center"
-        >
-          <motion.div
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-            className="w-5 h-8 rounded-full border border-border/50 flex items-start justify-center p-1.5"
-          >
-            <motion.div
-              animate={{ opacity: [1, 0.3, 1], height: ['4px', '8px', '4px'] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-              className="w-1 bg-muted-foreground rounded-full"
-            />
-          </motion.div>
-        </motion.div>
       </motion.div>
     </div>
   );
