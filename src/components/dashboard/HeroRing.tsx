@@ -26,7 +26,7 @@ function SmartRing() {
       <group ref={ringRef} rotation={[0.5, 0, 0.1]}>
         {/* Main ring — dark brushed titanium */}
         <mesh castShadow>
-          <torusGeometry args={[1.3, 0.32, 128, 256]} />
+          <torusGeometry args={[1.1, 0.3, 128, 256]} />
           <meshPhysicalMaterial
             color="#1c1c1c"
             metalness={1}
@@ -40,7 +40,7 @@ function SmartRing() {
 
         {/* Subtle brushed texture layer */}
         <mesh>
-          <torusGeometry args={[1.3, 0.325, 128, 256]} />
+          <torusGeometry args={[1.1, 0.305, 128, 256]} />
           <meshPhysicalMaterial
             color="#2a2a2a"
             metalness={1}
@@ -52,7 +52,7 @@ function SmartRing() {
 
         {/* Inner surface */}
         <mesh>
-          <torusGeometry args={[1.3, 0.26, 64, 256]} />
+          <torusGeometry args={[1.1, 0.22, 64, 256]} />
           <meshStandardMaterial
             color="#0a0a0a"
             metalness={0.8}
@@ -62,7 +62,7 @@ function SmartRing() {
 
         {/* Green sensor LED strip — the signature look */}
         <mesh ref={glowRef}>
-          <torusGeometry args={[1.05, 0.025, 32, 256]} />
+          <torusGeometry args={[0.85, 0.02, 32, 256]} />
           <meshStandardMaterial
             color="#4ade80"
             emissive="#4ade80"
@@ -73,7 +73,7 @@ function SmartRing() {
 
         {/* Individual sensor dots */}
         {[0, 0.8, -0.8, 1.6, -1.6].map((angle, i) => (
-          <mesh key={i} position={[Math.cos(angle) * 1.05, Math.sin(angle) * 0.02, Math.sin(angle) * 1.05]}>
+          <mesh key={i} position={[Math.cos(angle) * 0.85, Math.sin(angle) * 0.02, Math.sin(angle) * 0.85]}>
             <sphereGeometry args={[0.025, 16, 16]} />
             <meshStandardMaterial
               color="#22c55e"
@@ -91,7 +91,7 @@ function SmartRing() {
 function Scene() {
   return (
     <Canvas
-      camera={{ position: [0, 0, 4.5], fov: 35 }}
+      camera={{ position: [0, 0, 5.5], fov: 30 }}
       gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
       style={{ background: 'transparent' }}
     >
@@ -121,7 +121,7 @@ export default function HeroRing() {
   const smoothY = useSpring(ringY, { stiffness: 80, damping: 25 });
 
   return (
-    <div className="relative w-full flex flex-col items-center justify-center pb-4 overflow-visible">
+    <div className="relative w-full flex flex-col items-center justify-center pb-4 overflow-visible" style={{ minHeight: '420px' }}>
       {/* Background ambient glow */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <motion.div 
@@ -134,7 +134,7 @@ export default function HeroRing() {
       {/* 3D Ring */}
       <motion.div
         style={{ scale: smoothScale, y: smoothY, opacity: ringOpacity }}
-        className="relative z-10 w-[340px] h-[300px]"
+        className="relative z-10 w-[420px] h-[380px]"
       >
         <Scene />
 
