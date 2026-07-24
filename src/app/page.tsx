@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useState } from 'react';
 import {
   DollarSign,
   TrendingUp,
@@ -10,6 +11,7 @@ import {
   Activity,
   BarChart3,
   Clock,
+  Zap,
 } from 'lucide-react';
 import StatCard from '@/components/dashboard/StatCard';
 import PnlChart from '@/components/dashboard/PnlChart';
@@ -17,11 +19,30 @@ import CalendarHeatmap from '@/components/dashboard/CalendarHeatmap';
 import RecentTrades from '@/components/dashboard/RecentTrades';
 import HeroRing from '@/components/dashboard/HeroRing';
 import { useStore } from '@/store';
+import { generateDemoAccounts, generateDemoTrades, generateDemoHealthData, generateDemoJournalEntries } from '@/lib/demo-data';
 
 export default function Dashboard() {
   const trades = useStore((state) => state.trades);
   const accounts = useStore((state) => state.accounts);
   const healthData = useStore((state) => state.healthData);
+  const addAccount = useStore((state) => state.addAccount);
+  const addTrades = useStore((state) => state.addTrades);
+  const addHealthData = useStore((state) => state.addHealthData);
+  const addJournalEntry = useStore((state) => state.addJournalEntry);
+
+  const [demoLoaded, setDemoLoaded] = useState(false);
+
+  const loadDemoData = () => {
+    const demoAccounts = generateDemoAccounts();
+    demoAccounts.forEach((a) => addAccount(a));
+    const demoTrades = generateDemoTrades(demoAccounts);
+    addTrades(demoTrades);
+    const demoHealth = generateDemoHealthData();
+    demoHealth.forEach((h) => addHealthData(h));
+    const demoJournal = generateDemoJournalEntries();
+    demoJournal.forEach((j) => addJournalEntry(j));
+    setDemoLoaded(true);
+  };
 
   const closedTrades = trades.filter((t) => t.status === 'closed');
   const totalPnl = closedTrades.reduce((sum, t) => sum + (t.netPnl || 0), 0);
@@ -57,6 +78,24 @@ export default function Dashboard() {
     <div className="space-y-8">
       {/* Hero Ring Section */}
       <HeroRing />
+
+      {/* Demo Data CTA — only shows when app is empty */}
+      {trades.length === 0 && !demoLoaded && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 1 }}
+          className="flex justify-center"
+        >
+          <button
+            onClick={loadDemoData}
+            className="flex items-center gap-2 rounded-xl bg-secondary border border-border/50 px-6 py-3 text-sm font-medium text-white hover:border-primary/30 hover:bg-secondary/80 transition-all duration-300 group"
+          >
+            <Zap className="h-4 w-4 text-primary group-hover:scale-110 transition-transform" />
+            Load Demo Data — See Everything in Action
+          </button>
+        </motion.div>
+      )}
 
       {/* Page Title */}
       <motion.div
