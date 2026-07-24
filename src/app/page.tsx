@@ -1,5 +1,6 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import {
   DollarSign,
   TrendingUp,
@@ -52,14 +53,18 @@ export default function Dashboard() {
     : null;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Page Title */}
-      <div>
-        <h1 className="text-2xl font-bold text-white">Dashboard</h1>
-        <p className="text-[hsl(var(--muted-foreground))] text-sm mt-1">
+      <motion.div
+        initial={{ opacity: 0, y: -8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+      >
+        <h1 className="text-2xl font-bold text-white tracking-tight">Dashboard</h1>
+        <p className="text-muted-foreground text-sm mt-1">
           Your trading performance at a glance
         </p>
-      </div>
+      </motion.div>
 
       {/* Top Stats Row */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -69,6 +74,7 @@ export default function Dashboard() {
           change={`${closedTrades.length} total trades`}
           changeType={totalPnl >= 0 ? 'positive' : 'negative'}
           icon={DollarSign}
+          delay={0}
         />
         <StatCard
           title="Win Rate"
@@ -76,6 +82,7 @@ export default function Dashboard() {
           change={`${winningTrades.length}W / ${closedTrades.length - winningTrades.length}L`}
           changeType={Number(winRate) >= 50 ? 'positive' : 'negative'}
           icon={Target}
+          delay={0.05}
         />
         <StatCard
           title="Avg R-Multiple"
@@ -83,6 +90,7 @@ export default function Dashboard() {
           change="Risk-adjusted return"
           changeType={Number(avgRMultiple) >= 0 ? 'positive' : 'negative'}
           icon={TrendingUp}
+          delay={0.1}
         />
         <StatCard
           title="Max Drawdown"
@@ -90,45 +98,50 @@ export default function Dashboard() {
           change="Peak to trough"
           changeType={maxDrawdown > 0 ? 'negative' : 'neutral'}
           icon={AlertTriangle}
+          delay={0.15}
         />
       </div>
 
       {/* Secondary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
-          title="Active Accounts"
+          title="Accounts"
           value={`${accounts.filter((a) => a.isActive).length}`}
           subtitle={`${accounts.filter((a) => a.type === 'prop').length} prop / ${accounts.filter((a) => a.type === 'live').length} live`}
           icon={BarChart3}
+          delay={0.2}
         />
         <StatCard
-          title="Avg Trade Duration"
+          title="Avg Duration"
           value="--"
           subtitle="Coming with more data"
           icon={Clock}
+          delay={0.25}
         />
         <StatCard
           title="Sleep Score"
           value={latestHealth?.sleepScore ? `${latestHealth.sleepScore}` : '--'}
-          subtitle={latestHealth ? 'From Oura Ring' : 'Connect Oura Ring'}
+          subtitle={latestHealth ? 'Latest from ring' : 'Connect your ring'}
           changeType={latestHealth?.sleepScore && latestHealth.sleepScore >= 75 ? 'positive' : 'neutral'}
           icon={Moon}
+          delay={0.3}
         />
         <StatCard
           title="Readiness"
           value={latestHealth?.readinessScore ? `${latestHealth.readinessScore}` : '--'}
-          subtitle={latestHealth ? 'From Oura Ring' : 'Connect Oura Ring'}
+          subtitle={latestHealth ? 'Latest from ring' : 'Connect your ring'}
           changeType={latestHealth?.readinessScore && latestHealth.readinessScore >= 75 ? 'positive' : 'neutral'}
           icon={Activity}
+          delay={0.35}
         />
       </div>
 
       {/* Charts Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+        <div className="lg:col-span-3">
           <PnlChart />
         </div>
-        <div>
+        <div className="lg:col-span-2">
           <RecentTrades />
         </div>
       </div>

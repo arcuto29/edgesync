@@ -142,14 +142,14 @@ export default function HealthPage() {
         <div className="flex gap-3">
           <button
             onClick={() => setShowImportDevice(true)}
-            className="flex items-center gap-2 rounded-lg bg-secondary px-4 py-2 text-sm font-medium text-white hover:opacity-80 transition-opacity"
+            className="flex items-center gap-2 rounded-xl bg-secondary px-4 py-2 text-sm font-medium text-white hover:opacity-80 transition-opacity"
           >
             <Upload className="h-4 w-4" />
             Import Data
           </button>
           <button
             onClick={() => setShowAdd(true)}
-            className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90 transition-opacity"
+            className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90 transition-opacity"
           >
             <Plus className="h-4 w-4" />
             Manual Entry
@@ -159,7 +159,7 @@ export default function HealthPage() {
 
 
       {/* Supported Devices Banner */}
-      <div className="rounded-xl bg-card border border-border p-5">
+      <div className="rounded-2xl bg-card border border-border p-5">
         <h3 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
           <Smartphone className="h-4 w-4 text-primary" />
           Supported Devices
@@ -168,7 +168,7 @@ export default function HealthPage() {
           {SUPPORTED_DEVICES.map((device) => (
             <div
               key={device.id}
-              className="relative flex items-center gap-2 rounded-lg bg-secondary px-3 py-2 text-xs"
+              className="relative flex items-center gap-2 rounded-xl bg-secondary px-3 py-2 text-xs"
             >
               <span className={`w-2 h-2 rounded-full ${deviceCounts[device.id] ? 'bg-green-500' : 'bg-muted-foreground'}`} />
               <span className="text-white font-medium">{device.name}</span>
@@ -183,7 +183,7 @@ export default function HealthPage() {
       {/* Quick Health Stats */}
       {healthData.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-          <div className="rounded-xl bg-card border border-border p-4">
+          <div className="rounded-2xl bg-card border border-border p-4">
             <div className="flex items-center gap-2 mb-2">
               <Moon className="h-4 w-4 text-purple-400" />
               <p className="text-xs text-muted-foreground">Avg Sleep Score</p>
@@ -194,7 +194,7 @@ export default function HealthPage() {
                 : '--'}
             </p>
           </div>
-          <div className="rounded-xl bg-card border border-border p-4">
+          <div className="rounded-2xl bg-card border border-border p-4">
             <div className="flex items-center gap-2 mb-2">
               <Zap className="h-4 w-4 text-yellow-400" />
               <p className="text-xs text-muted-foreground">Avg Readiness</p>
@@ -205,7 +205,7 @@ export default function HealthPage() {
                 : '--'}
             </p>
           </div>
-          <div className="rounded-xl bg-card border border-border p-4">
+          <div className="rounded-2xl bg-card border border-border p-4">
             <div className="flex items-center gap-2 mb-2">
               <Activity className="h-4 w-4 text-green-400" />
               <p className="text-xs text-muted-foreground">Avg HRV</p>
@@ -217,7 +217,7 @@ export default function HealthPage() {
               <span className="text-sm text-muted-foreground ml-1">ms</span>
             </p>
           </div>
-          <div className="rounded-xl bg-card border border-border p-4">
+          <div className="rounded-2xl bg-card border border-border p-4">
             <div className="flex items-center gap-2 mb-2">
               <Heart className="h-4 w-4 text-red-400" />
               <p className="text-xs text-muted-foreground">Avg Resting HR</p>
@@ -229,7 +229,7 @@ export default function HealthPage() {
               <span className="text-sm text-muted-foreground ml-1">bpm</span>
             </p>
           </div>
-          <div className="rounded-xl bg-card border border-border p-4">
+          <div className="rounded-2xl bg-card border border-border p-4">
             <div className="flex items-center gap-2 mb-2">
               <Activity className="h-4 w-4 text-blue-400" />
               <p className="text-xs text-muted-foreground">Avg SpO2</p>
@@ -247,7 +247,7 @@ export default function HealthPage() {
 
       {/* Correlation Chart */}
       {correlationData.length > 0 && (
-        <div className="rounded-xl bg-card border border-border p-5">
+        <div className="rounded-2xl bg-card border border-border p-5">
           <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
             <Brain className="h-5 w-5 text-purple-400" />
             Sleep Score vs Trading P&L
@@ -272,7 +272,7 @@ export default function HealthPage() {
 
       {/* Health Trend Chart */}
       {healthData.length > 1 && (
-        <div className="rounded-xl bg-card border border-border p-5">
+        <div className="rounded-2xl bg-card border border-border p-5">
           <h3 className="text-lg font-semibold text-white mb-4">Health Trends</h3>
           <ResponsiveContainer width="100%" height={250}>
             <LineChart data={[...healthData].sort((a, b) => a.date.localeCompare(b.date))}>
@@ -290,7 +290,7 @@ export default function HealthPage() {
 
 
       {/* Health Log */}
-      <div className="rounded-xl bg-card border border-border p-5">
+      <div className="rounded-2xl bg-card border border-border p-5">
         <h3 className="text-lg font-semibold text-white mb-4">Health Log</h3>
         {sortedHealth.length > 0 ? (
           <div className="space-y-3">
@@ -325,7 +325,7 @@ export default function HealthPage() {
       {/* Import Device Modal */}
       {showImportDevice && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="w-full max-w-lg rounded-xl bg-card border border-border p-6 max-h-[85vh] overflow-y-auto">
+          <div className="w-full max-w-lg rounded-2xl bg-card border border-border p-6 max-h-[85vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-lg font-semibold text-white">Import Health Data</h2>
               <button onClick={() => { setShowImportDevice(false); setImportStatus(''); }} className="text-muted-foreground hover:text-white">
@@ -342,7 +342,7 @@ export default function HealthPage() {
                     <button
                       key={device.id}
                       onClick={() => { setImportDevice(device.id); setShowDeviceInfo(device.id); }}
-                      className={`flex flex-col items-start rounded-lg p-3 text-left text-xs transition-colors ${
+                      className={`flex flex-col items-start rounded-xl p-3 text-left text-xs transition-colors ${
                         importDevice === device.id
                           ? 'bg-primary/20 border border-primary text-white'
                           : 'bg-secondary border border-border text-muted-foreground hover:text-white'
@@ -359,7 +359,7 @@ export default function HealthPage() {
 
               {/* Instructions for selected device */}
               {showDeviceInfo && (
-                <div className="rounded-lg bg-secondary p-4">
+                <div className="rounded-xl bg-secondary p-4">
                   <h4 className="text-sm font-medium text-white mb-2 flex items-center gap-2">
                     <Info className="h-4 w-4 text-primary" />
                     How to export from {SUPPORTED_DEVICES.find(d => d.id === showDeviceInfo)?.name}
@@ -383,7 +383,7 @@ export default function HealthPage() {
                   type="file"
                   accept=".csv"
                   onChange={handleFileImport}
-                  className="w-full rounded-lg bg-secondary px-3 py-2 text-sm text-white border border-border file:mr-4 file:rounded file:border-0 file:bg-primary file:px-3 file:py-1 file:text-sm file:text-black file:font-medium"
+                  className="w-full rounded-xl bg-secondary px-3 py-2 text-sm text-white border border-border file:mr-4 file:rounded file:border-0 file:bg-primary file:px-3 file:py-1 file:text-sm file:text-black file:font-medium"
                 />
               </div>
 
@@ -391,7 +391,7 @@ export default function HealthPage() {
               {importDevice === 'oura' && (
                 <button
                   onClick={() => { setShowImportDevice(false); setShowOuraSetup(true); }}
-                  className="w-full rounded-lg bg-secondary border border-border px-4 py-2.5 text-sm font-medium text-white hover:opacity-80 transition-opacity"
+                  className="w-full rounded-xl bg-secondary border border-border px-4 py-2.5 text-sm font-medium text-white hover:opacity-80 transition-opacity"
                 >
                   Or connect via Oura API (auto-sync)
                 </button>
@@ -411,7 +411,7 @@ export default function HealthPage() {
       {/* Manual Entry Modal */}
       {showAdd && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="w-full max-w-md rounded-xl bg-card border border-border p-6 max-h-[85vh] overflow-y-auto">
+          <div className="w-full max-w-md rounded-2xl bg-card border border-border p-6 max-h-[85vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-lg font-semibold text-white">Add Health Data</h2>
               <button onClick={() => setShowAdd(false)} className="text-muted-foreground hover:text-white">
@@ -422,42 +422,42 @@ export default function HealthPage() {
               <div>
                 <label className="block text-sm text-muted-foreground mb-1">Date</label>
                 <input type="date" value={newEntry.date} onChange={(e) => setNewEntry({ ...newEntry, date: e.target.value })}
-                  className="w-full rounded-lg bg-secondary px-3 py-2 text-sm text-white border border-border" />
+                  className="w-full rounded-xl bg-secondary px-3 py-2 text-sm text-white border border-border" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm text-muted-foreground mb-1">Sleep Score (0-100)</label>
                   <input type="number" value={newEntry.sleepScore} onChange={(e) => setNewEntry({ ...newEntry, sleepScore: e.target.value })}
-                    className="w-full rounded-lg bg-secondary px-3 py-2 text-sm text-white border border-border" placeholder="85" />
+                    className="w-full rounded-xl bg-secondary px-3 py-2 text-sm text-white border border-border" placeholder="85" />
                 </div>
                 <div>
                   <label className="block text-sm text-muted-foreground mb-1">Sleep Hours</label>
                   <input type="number" step="0.5" value={newEntry.sleepDuration} onChange={(e) => setNewEntry({ ...newEntry, sleepDuration: e.target.value })}
-                    className="w-full rounded-lg bg-secondary px-3 py-2 text-sm text-white border border-border" placeholder="7.5" />
+                    className="w-full rounded-xl bg-secondary px-3 py-2 text-sm text-white border border-border" placeholder="7.5" />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm text-muted-foreground mb-1">Readiness (0-100)</label>
                   <input type="number" value={newEntry.readinessScore} onChange={(e) => setNewEntry({ ...newEntry, readinessScore: e.target.value })}
-                    className="w-full rounded-lg bg-secondary px-3 py-2 text-sm text-white border border-border" placeholder="80" />
+                    className="w-full rounded-xl bg-secondary px-3 py-2 text-sm text-white border border-border" placeholder="80" />
                 </div>
                 <div>
                   <label className="block text-sm text-muted-foreground mb-1">HRV (ms)</label>
                   <input type="number" value={newEntry.hrvAvg} onChange={(e) => setNewEntry({ ...newEntry, hrvAvg: e.target.value })}
-                    className="w-full rounded-lg bg-secondary px-3 py-2 text-sm text-white border border-border" placeholder="45" />
+                    className="w-full rounded-xl bg-secondary px-3 py-2 text-sm text-white border border-border" placeholder="45" />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm text-muted-foreground mb-1">Resting HR (bpm)</label>
                   <input type="number" value={newEntry.restingHR} onChange={(e) => setNewEntry({ ...newEntry, restingHR: e.target.value })}
-                    className="w-full rounded-lg bg-secondary px-3 py-2 text-sm text-white border border-border" placeholder="58" />
+                    className="w-full rounded-xl bg-secondary px-3 py-2 text-sm text-white border border-border" placeholder="58" />
                 </div>
                 <div>
                   <label className="block text-sm text-muted-foreground mb-1">SpO2 (%)</label>
                   <input type="number" value={newEntry.spo2} onChange={(e) => setNewEntry({ ...newEntry, spo2: e.target.value })}
-                    className="w-full rounded-lg bg-secondary px-3 py-2 text-sm text-white border border-border" placeholder="97" />
+                    className="w-full rounded-xl bg-secondary px-3 py-2 text-sm text-white border border-border" placeholder="97" />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -466,18 +466,18 @@ export default function HealthPage() {
                     <Coffee className="h-3 w-3" /> Caffeine (mg)
                   </label>
                   <input type="number" value={newEntry.caffeineIntake} onChange={(e) => setNewEntry({ ...newEntry, caffeineIntake: e.target.value })}
-                    className="w-full rounded-lg bg-secondary px-3 py-2 text-sm text-white border border-border" placeholder="200" />
+                    className="w-full rounded-xl bg-secondary px-3 py-2 text-sm text-white border border-border" placeholder="200" />
                 </div>
                 <div>
                   <label className="block text-sm text-muted-foreground mb-1 flex items-center gap-1">
                     <Wine className="h-3 w-3" /> Alcohol (drinks)
                   </label>
                   <input type="number" value={newEntry.alcoholServings} onChange={(e) => setNewEntry({ ...newEntry, alcoholServings: e.target.value })}
-                    className="w-full rounded-lg bg-secondary px-3 py-2 text-sm text-white border border-border" placeholder="0" />
+                    className="w-full rounded-xl bg-secondary px-3 py-2 text-sm text-white border border-border" placeholder="0" />
                 </div>
               </div>
               <button onClick={handleAddManual}
-                className="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:opacity-90 transition-opacity">
+                className="w-full rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:opacity-90 transition-opacity">
                 Save Health Data
               </button>
             </div>
@@ -489,7 +489,7 @@ export default function HealthPage() {
       {/* Oura API Setup Modal */}
       {showOuraSetup && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="w-full max-w-md rounded-xl bg-card border border-border p-6">
+          <div className="w-full max-w-md rounded-2xl bg-card border border-border p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-lg font-semibold text-white">Connect Oura Ring API</h2>
               <button onClick={() => setShowOuraSetup(false)} className="text-muted-foreground hover:text-white">
@@ -497,7 +497,7 @@ export default function HealthPage() {
               </button>
             </div>
             <div className="space-y-4">
-              <div className="rounded-lg bg-secondary p-4">
+              <div className="rounded-xl bg-secondary p-4">
                 <h4 className="text-sm font-medium text-white mb-2">How to get your token:</h4>
                 <ol className="text-xs text-muted-foreground space-y-1 list-decimal list-inside">
                   <li>Go to cloud.ouraring.com/personal-access-tokens</li>
@@ -509,12 +509,12 @@ export default function HealthPage() {
               <div>
                 <label className="block text-sm text-muted-foreground mb-1">API Token</label>
                 <input type="password" value={ouraToken} onChange={(e) => setOuraToken(e.target.value)}
-                  className="w-full rounded-lg bg-secondary px-3 py-2 text-sm text-white border border-border"
+                  className="w-full rounded-xl bg-secondary px-3 py-2 text-sm text-white border border-border"
                   placeholder="Paste your Oura personal access token" />
               </div>
               {ouraApiToken && <p className="text-xs text-profit">Oura Ring is currently connected</p>}
               <button onClick={handleConnectOura} disabled={!ouraToken}
-                className="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-50">
+                className="w-full rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-50">
                 Connect Oura Ring
               </button>
             </div>

@@ -122,16 +122,16 @@ export default function AnalyticsPage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-white">Analytics</h1>
-        <p className="text-[hsl(var(--muted-foreground))] text-sm mt-1">
+        <p className="text-muted-foreground text-sm mt-1">
           Deep dive into your trading performance
         </p>
       </div>
 
       {!hasData ? (
-        <div className="rounded-xl bg-[hsl(var(--card))] border border-[hsl(var(--border))] p-16 text-center">
-          <BarChart3 className="h-12 w-12 mx-auto mb-4 text-[hsl(var(--muted-foreground))] opacity-50" />
-          <p className="text-lg font-medium text-[hsl(var(--muted-foreground))]">No data to analyze yet</p>
-          <p className="text-sm mt-1 text-[hsl(var(--muted-foreground))]">
+        <div className="rounded-2xl bg-card border border-border/50 p-16 text-center">
+          <BarChart3 className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
+          <p className="text-lg font-medium text-muted-foreground">No data to analyze yet</p>
+          <p className="text-sm mt-1 text-muted-foreground">
             Add some trades to see your analytics
           </p>
         </div>
@@ -139,8 +139,8 @@ export default function AnalyticsPage() {
         <>
           {/* Quick Stats */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="rounded-xl bg-[hsl(var(--card))] border border-[hsl(var(--border))] p-4">
-              <p className="text-xs text-[hsl(var(--muted-foreground))]">Profit Factor</p>
+            <div className="rounded-2xl bg-card border border-border/50 p-4">
+              <p className="text-xs text-muted-foreground">Profit Factor</p>
               <p className="text-xl font-bold text-white mt-1">
                 {(() => {
                   const grossProfit = closedTrades
@@ -155,25 +155,25 @@ export default function AnalyticsPage() {
                 })()}
               </p>
             </div>
-            <div className="rounded-xl bg-[hsl(var(--card))] border border-[hsl(var(--border))] p-4">
-              <p className="text-xs text-[hsl(var(--muted-foreground))]">Avg Winner</p>
-              <p className="text-xl font-bold text-[hsl(var(--profit))] mt-1">
+            <div className="rounded-2xl bg-card border border-border/50 p-4">
+              <p className="text-xs text-muted-foreground">Avg Winner</p>
+              <p className="text-xl font-bold text-profit mt-1">
                 +${closedTrades.filter((t) => (t.netPnl || 0) > 0).length > 0
                   ? (closedTrades.filter((t) => (t.netPnl || 0) > 0).reduce((sum, t) => sum + (t.netPnl || 0), 0) / closedTrades.filter((t) => (t.netPnl || 0) > 0).length).toFixed(2)
                   : '0.00'}
               </p>
             </div>
-            <div className="rounded-xl bg-[hsl(var(--card))] border border-[hsl(var(--border))] p-4">
-              <p className="text-xs text-[hsl(var(--muted-foreground))]">Avg Loser</p>
-              <p className="text-xl font-bold text-[hsl(var(--loss))] mt-1">
+            <div className="rounded-2xl bg-card border border-border/50 p-4">
+              <p className="text-xs text-muted-foreground">Avg Loser</p>
+              <p className="text-xl font-bold text-loss mt-1">
                 -${closedTrades.filter((t) => (t.netPnl || 0) < 0).length > 0
                   ? Math.abs(closedTrades.filter((t) => (t.netPnl || 0) < 0).reduce((sum, t) => sum + (t.netPnl || 0), 0) / closedTrades.filter((t) => (t.netPnl || 0) < 0).length).toFixed(2)
                   : '0.00'}
               </p>
             </div>
-            <div className="rounded-xl bg-[hsl(var(--card))] border border-[hsl(var(--border))] p-4">
-              <p className="text-xs text-[hsl(var(--muted-foreground))]">Largest Win</p>
-              <p className="text-xl font-bold text-[hsl(var(--profit))] mt-1">
+            <div className="rounded-2xl bg-card border border-border/50 p-4">
+              <p className="text-xs text-muted-foreground">Largest Win</p>
+              <p className="text-xl font-bold text-profit mt-1">
                 +${Math.max(...closedTrades.map((t) => t.netPnl || 0), 0).toFixed(2)}
               </p>
             </div>
@@ -182,7 +182,7 @@ export default function AnalyticsPage() {
           {/* Charts Row 1 */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Strategy Performance */}
-            <div className="rounded-xl bg-[hsl(var(--card))] border border-[hsl(var(--border))] p-5">
+            <div className="rounded-2xl bg-card border border-border/50 p-5">
               <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
                 <Target className="h-5 w-5 text-[hsl(var(--primary))]" />
                 Strategy Performance
@@ -206,7 +206,7 @@ export default function AnalyticsPage() {
             </div>
 
             {/* Win/Loss Distribution */}
-            <div className="rounded-xl bg-[hsl(var(--card))] border border-[hsl(var(--border))] p-5">
+            <div className="rounded-2xl bg-card border border-border/50 p-5">
               <h3 className="text-lg font-semibold text-white mb-4">Win/Loss Distribution</h3>
               <ResponsiveContainer width="100%" height={250}>
                 <PieChart>
@@ -232,7 +232,7 @@ export default function AnalyticsPage() {
           {/* Charts Row 2 */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Time of Day */}
-            <div className="rounded-xl bg-[hsl(var(--card))] border border-[hsl(var(--border))] p-5">
+            <div className="rounded-2xl bg-card border border-border/50 p-5">
               <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
                 <Clock className="h-5 w-5 text-[hsl(var(--primary))]" />
                 Performance by Time of Day
@@ -269,9 +269,9 @@ export default function AnalyticsPage() {
             </div>
 
             {/* Drawdown Chart */}
-            <div className="rounded-xl bg-[hsl(var(--card))] border border-[hsl(var(--border))] p-5">
+            <div className="rounded-2xl bg-card border border-border/50 p-5">
               <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-[hsl(var(--loss))]" />
+                <TrendingUp className="h-5 w-5 text-loss" />
                 Drawdown
               </h3>
               <ResponsiveContainer width="100%" height={250}>
@@ -300,25 +300,25 @@ export default function AnalyticsPage() {
           </div>
 
           {/* Symbol Performance Table */}
-          <div className="rounded-xl bg-[hsl(var(--card))] border border-[hsl(var(--border))] p-5">
+          <div className="rounded-2xl bg-card border border-border/50 p-5">
             <h3 className="text-lg font-semibold text-white mb-4">Performance by Symbol</h3>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-[hsl(var(--border))]">
-                    <th className="px-4 py-2 text-left text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase">Symbol</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase">Trades</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase">Win Rate</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase">Total P&L</th>
+                  <tr className="border-b border-border/50">
+                    <th className="px-4 py-2 text-left text-xs font-medium text-muted-foreground uppercase">Symbol</th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-muted-foreground uppercase">Trades</th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-muted-foreground uppercase">Win Rate</th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-muted-foreground uppercase">Total P&L</th>
                   </tr>
                 </thead>
                 <tbody>
                   {symbolData.map((s) => (
-                    <tr key={s.symbol} className="border-b border-[hsl(var(--border))]">
+                    <tr key={s.symbol} className="border-b border-border/50">
                       <td className="px-4 py-2 text-sm font-medium text-white">{s.symbol}</td>
-                      <td className="px-4 py-2 text-sm text-[hsl(var(--muted-foreground))]">{s.trades}</td>
-                      <td className="px-4 py-2 text-sm text-[hsl(var(--muted-foreground))]">{s.winRate.toFixed(1)}%</td>
-                      <td className={`px-4 py-2 text-sm font-semibold ${s.pnl >= 0 ? 'text-[hsl(var(--profit))]' : 'text-[hsl(var(--loss))]'}`}>
+                      <td className="px-4 py-2 text-sm text-muted-foreground">{s.trades}</td>
+                      <td className="px-4 py-2 text-sm text-muted-foreground">{s.winRate.toFixed(1)}%</td>
+                      <td className={`px-4 py-2 text-sm font-semibold ${s.pnl >= 0 ? 'text-profit' : 'text-loss'}`}>
                         {s.pnl >= 0 ? '+' : ''}${s.pnl.toFixed(2)}
                       </td>
                     </tr>
