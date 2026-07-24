@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: hsl(220 20% 6%);
+  --color-foreground: hsl(210 40% 98%);
+  --color-card: hsl(220 20% 9%);
+  --color-card-foreground: hsl(210 40% 98%);
+  --color-primary: hsl(142 76% 46%);
+  --color-primary-foreground: hsl(220 20% 6%);
+  --color-secondary: hsl(220 20% 14%);
+  --color-secondary-foreground: hsl(210 40% 98%);
+  --color-muted: hsl(220 20% 14%);
+  --color-muted-foreground: hsl(215 20% 55%);
+  --color-border: hsl(220 20% 18%);
+  --color-input: hsl(220 20% 18%);
+  --color-profit: hsl(142 76% 46%);
+  --color-loss: hsl(0 84% 60%);
+  --color-warning: hsl(38 92% 50%);
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-muted-foreground);
+}
+
+/* Calendar heatmap styles */
+.heatmap-cell {
+  transition: all 0.2s ease;
+}
+
+.heatmap-cell:hover {
+  transform: scale(1.2);
+  z-index: 10;
+}
