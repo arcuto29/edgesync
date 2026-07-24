@@ -15,6 +15,7 @@ import StatCard from '@/components/dashboard/StatCard';
 import PnlChart from '@/components/dashboard/PnlChart';
 import CalendarHeatmap from '@/components/dashboard/CalendarHeatmap';
 import RecentTrades from '@/components/dashboard/RecentTrades';
+import HeroRing from '@/components/dashboard/HeroRing';
 import { useStore } from '@/store';
 
 export default function Dashboard() {
@@ -54,6 +55,9 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-8">
+      {/* Hero Ring Section */}
+      <HeroRing />
+
       {/* Page Title */}
       <motion.div
         initial={{ opacity: 0, y: -8 }}

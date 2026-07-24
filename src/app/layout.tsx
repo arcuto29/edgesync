@@ -23,7 +23,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`dark ${inter.variable}`}>
       <body className="noise-bg">
-        <div className="flex min-h-screen">
+        {/* Animated background layers */}
+        <div className="animated-bg" />
+        <div className="mesh-bg" />
+        <div className="grid-bg" />
+        <div className="aurora" />
+        
+        <div className="relative z-10 flex min-h-screen">
           <Sidebar />
           <div className="flex-1 ml-[260px]">
             <Header />
